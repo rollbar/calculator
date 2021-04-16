@@ -1,8 +1,27 @@
 import React from "react";
+import {
+  Provider,
+  Context,
+  ErrorBoundary,
+  useRollbar,
+  useRollbarCaptureEvent,
+  LEVEL_INFO,
+  useRollbarPerson,
+  useContext,
+  RollbarContext,
+  historyContext
+} from '@rollbar/react';
 import Display from "./Display";
 import ButtonPanel from "./ButtonPanel";
 import calculate from "../logic/calculate";
 import "./App.css";
+
+const rollbarConfig = {
+  accessToken: '6d889490219d4211bd5dcf2c1def425e',
+  environment: 'production',
+  captureUncaught: true,
+  captureUnhandledRejections: true	
+};
 
 export default class App extends React.Component {
   state = {
@@ -16,11 +35,13 @@ export default class App extends React.Component {
   };
 
   render() {
-    return (
-      <div className="component-app">
-        <Display value={this.state.next || this.state.total || "0"} />
-        <ButtonPanel clickHandler={this.handleClick} />
-      </div>
-    );
-  }
+      return (
+        <Provider config={rollbarConfig}>
+          <div className="component-app">
+            <Display value={this.state.next || this.state.total || "0"} />
+            <ButtonPanel clickHandler={this.handleClick} />
+          </div>
+        </Provider>
+      );
+    }
 }
